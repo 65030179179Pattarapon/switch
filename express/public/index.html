@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Switch Button Data</title>
+  <link href="https://fonts.googleapis.com/css?family=Inter&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --font-family: 'Inter', sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin-bottom: 20px;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .data-box {
+      background-color: #d9d9d9;
+      border-radius: 20px;
+      padding: 20px;
+      font-size: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 300px;
+      margin-bottom: 20px;
+    }
+
+    .data-row {
+      margin-bottom: 10px;
+    }
+
+    .label {
+      font-weight: bold;
+    }
+
+    .value {
+      margin-left: 10px;
+    }
+
+  </style>
+</head>
+<body>
+  <h1>Switch Button Data</h1>
+  
+  <div class="container">
+    <div class="data-box">
+      <div class="data-row">
+        <span class="label">จำนวนการกดปุ่ม:</span>
+        <span class="value" id="count-box">กำลังโหลด...</span>
+      </div>
+      <div class="data-row">
+        <span class="label">เวลาที่บันทึก:</span>
+        <span class="value" id="timestamp-box">กำลังโหลด...</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ฟังก์ชันดึงข้อมูลล่าสุดจาก API
+    function fetchData() {
+      fetch('http://192.168.137.247:3305/sensor-data') // ใช้ URL ของ Node.js ที่ถูกต้อง
+        .then(response => response.json())
+        .then(data => {
+          // อัปเดตค่าที่ได้รับจาก API
+          document.getElementById('count-box').innerText = data.count !== undefined ? data.count : 'ไม่มีข้อมูล';
+          document.getElementById('timestamp-box').innerText = data.timestamp ? new Date(data.timestamp).toLocaleString() : 'ไม่มีข้อมูล';
+        })
+        .catch(err => console.log('Error:', err));
+    }
+
+    // ดึงข้อมูลทุก 5 วินาที
+    setInterval(fetchData, 5000);
+
+    // เรียกฟังก์ชันเมื่อหน้าโหลดเสร็จ
+    fetchData();
+  </script>
+
+</body>
+</html>

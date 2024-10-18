@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "netstat": "^0.0.2"
+  }
+}

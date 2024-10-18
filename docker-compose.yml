@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  express:
+    build: ./express
+    volumes:
+      - ./express:/usr/src/app
+    networks:
+      - switch-network
+    ports:
+      - "3305:3305"
+
+  nginx:
+    build:
+      context: .  # Make sure to set the context to the parent directory
+      dockerfile: ./nginx/Dockerfile  # Specify the Dockerfile if needed
+    networks:
+      - switch-network
+    ports:
+      - "8083:8083"
+
+  mongodb:
+    build: ./mongodb
+    networks:
+      - switch-network
+    ports:
+      - "27017:27017"
+
+networks:
+  switch-network:
+    driver: bridge
